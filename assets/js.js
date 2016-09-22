@@ -18,3 +18,4 @@ function initMap() {
   });
 });
 }
+// how to make work current location and add marker thing
