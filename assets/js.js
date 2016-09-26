@@ -5,13 +5,14 @@
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
+var map
 function initAutocomplete() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 40.217923, lng: -74.746296},  
-    zoom: 8,
-    mapTypeId: 'roadmap'
-  });
+  initMap();
+  // var map = new google.maps.Map(document.getElementById('map'), {
+  //   center: {lat: 40.217923, lng: -74.746296},  
+  //   zoom: 8,
+  //   mapTypeId: 'roadmap'
+  // });
 
   // Create the search box and link it to the UI element.
   var input = document.getElementById('pac-input');
@@ -71,4 +72,120 @@ function initAutocomplete() {
     });
     map.fitBounds(bounds);
   });
+  // window.setTimeout(initMap, 2000);
+  // initMap();
+}
+
+function getCity( options, complete ) {
+      
+    var geocoder = new google.maps.Geocoder(),
+        request;
+
+    if( options.latitude ) {
+        
+        request= { 'latLng': new google.maps.LatLng( options.latitude, options.longitude ) };
+      
+    } else {
+        
+        request= { 'address': options.address };
+        
+    };
+    
+    geocoder.geocode( request, function( results, status ) {
+            
+        if ( status == google.maps.GeocoderStatus.OK ) {
+            
+            console.log( results );
+            
+            //check top-level results
+            for( var resultIndex = 0; resultIndex < results.length; resultIndex++ ) {
+              
+                var types = results[resultIndex].types;
+                
+                for( var typeIndex = 0; typeIndex < types.length; typeIndex++ ) {
+                
+                    if( types[typeIndex] == 'locality' ) {
+                        
+                        complete( results[resultIndex].formatted_address );
+                        return;
+                        
+                    };
+                    
+                };
+
+            };
+            
+            //no result, check addresses
+            for( var resultIndex = 0; resultIndex < results.length; resultIndex++ ) {
+              
+                var addresses = results[resultIndex].address_components;
+                
+                for( var addressIndex = 0; addressIndex < addresses.length; addressIndex++ ) {
+                
+                    var types = addresses[addressIndex].types;
+                    
+                    for( var typeIndex = 0; typeIndex < types.length; typeIndex++ ) {
+                    
+                        if( types[typeIndex] == 'locality' ) {
+                            
+                            complete( addresses[addressIndex].long_name );
+                            return;
+                            
+                        };
+                        
+                    };
+                    
+                };
+                
+            };
+            
+        } else {
+            
+            console.log( 'error: ' + status );
+            complete();
+            
+        };
+            
+    });
+    
+};
+
+
+var initMap = function(){
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: -34.397, lng: 150.644},
+    zoom: 12
+  });
+  var infoWindow = new google.maps.InfoWindow({map: map});
+
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      infoWindow.setPosition(pos);
+      getCity( { latitude: position.coords.latitude, longitude: position.coords.longitude }, function ( city ) {
+        console.log(city);
+        infoWindow.setContent(city);
+      });      
+      map.setCenter(pos);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+}
+
+
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
 }
