@@ -3,17 +3,26 @@
 <!DOCTYPE html>
 <html>
  <head>
-   <style type="text/css">
-     html, body { height: 100%; margin: 0; padding: 0; }
-     #map { height: 100%; }
-   </style>
+  <title>Johnny On the Go!!!</title>
+  <link rel="stylesheet" type="text/css" href="assets/css.css">
  </head>
  <body>
+  <input id="pac-input" class="controls" type="text" placeholder="Search Box">
    <div id="map"></div>
+
+   <!-- Replace the value of the key parameter with your own API key. -->
+
+
+<!-- <input id = textBox type = "text">
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3&amp;sensor=false"></script>
+<div id="map_div" style="height: 400px;"></div> -->
    <script async defer
        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3LTRvXgjfgIr6sAsuv_RI5OI1-xBHUvo
        &libraries=visualization&callback=initMap">
    </script>
-   <script src="map.js"> </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-IyZRZAvhDy-EreLYglFdoF3srlLDxq0&libraries=places&callback=initAutocomplete"
+         async defer></script>
+   <script type="text/javascript" src="assets/js.js"></script>
  </body>
 </html>
