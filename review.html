@@ -2,10 +2,17 @@
 <html>
 <head>
     <title>Johnny On the Go!!!</title>
+    <!-- bootstrap link -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- link to css -->
     <link rel="stylesheet" type="text/css" href="assets/css/css.css">
+    <!-- jquery -->
    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+   <!-- bootstrap javascript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <!-- firebadse -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script> -->
+
 </head>
 <body>
   <!-- Text box -->
@@ -19,7 +26,6 @@
     <div class="col-lg-6">
     <div class="panel panel-default">
         <div class="panel-body">
-          
           <!-- Sign-up Form (note the various input "types")-->
           <form role="form">
             <div class="form-group">
@@ -41,9 +47,12 @@
              </form>
              <!-- <img id="thumup" src="assets/images/thumbsup.png">
              <img id="thumdown" src="assets/images/thumbdown.png"> -->
-             <div id="uVote"></div>
-             <div id="resultVote"></div>
-             <div id="dVote"></div>
+            <button id="positivevote" type="button" class="btn btn-default btn-lg">
+  <span id="upVote" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+</button>
+<button id="negativevote" type="button" class="btn btn-default btn-lg">
+  <span id="downVote" class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+</button>
              <form>
             <button type="submit" class="btn btn-default" id="addRev">Submit</button>
             <button type="submit" class="btn btn-default" id="cancel"><a href="index.html">Go Back</a></button>
@@ -58,7 +67,7 @@
         <div class="panel-heading">
           <h3 class="panel-title">List of reviews</h3>
         </div>
-        <div class="panel-body" id="recentMember">
+        <div class="panel-body" id="recentReview">
           <h2 id="addressdisplay"></h2>
           <h4 id="namedisplay"></h4>
           <h4 id="placedisplay"></h4>
@@ -70,6 +79,8 @@
 </div>
 <!-- </div> -->
   <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script> -->
+  <!-- javascript file  -->
   <script type="text/javascript" src="assets/javascript/js.js"></script>
+
 </body>
 </html>
