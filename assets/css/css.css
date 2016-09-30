@@ -70,3 +70,25 @@ html, body {
   margin-top: 30px;
   /*overflow: hidden;*/
 }
+a{
+  color: #333;
+}
+a:link{
+ text-decoration: none;
+}
+a:hover{
+  color: #333;
+}
+#namedisplay{
+  /*margin-bottom: -5px;*/
+  display: inline;
+
+}
+#ratingdisplay{
+  /*margin-bottom: -5px;*/
+  display: inline;
+  float: right;
+}
+#namedisplay, #ratingdisplay, #addressdisplay, #hoursdisplay, #placedisplay, #reviewdisplay{
+  margin-bottom: -5px;
+}
