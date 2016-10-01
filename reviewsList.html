@@ -70,13 +70,26 @@
     -webkit-transition: width 0.5s; 
     transition: width 0.5s;
           }
+          #reviews{
+            float: left;
+          }
+          #reviews ul{
+            float: left;
+            width: 100%;
+          }
+          #reviews ul li{
+            float: left;
+            width: 100%;
+          }
+          #reviews ul li span{
+            float: left;
+            width: 100%;
+          }
           
 </style>
 
 
-  <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
-
+        <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
   <script type="text/javascript" src="assets/javascript/js.js"></script>
 <script type="text/javascript">
 
@@ -115,53 +128,23 @@ function updateHTML(){
 <div id="review-body">
   <!-- Text box -->
     <div class="container" id="textBox">
-  <h2>Add your review</h2>
+      <h2>Review</h2>
    </div>
 
     <!-- Sign-Up Panel-->
     <div class="col-lg-6" style="width: 100%">
     <div class="panel panel-default">
         <div class="panel-body">
+          <div id="reviews">
+            <ul></ul>
+          </div>
           <!-- Sign-up Form (note the various input "types")-->
-          <form role="form">
-            <div class="form-group">
-              <label for="text">Address:</label>
-              <input id="pac-input" class="controls" type="text" placeholder="Address">
-            </div>
-            <div class="form-group">
-              <label for="text">Name:</label>
-              <input type="text" class="form-control" id="nameinput" placeholder="Type your Name (optional)">
-            </div>
-            <div class="form-group">
-              <label for="text">Place Type:</label>
-              <input type="text" class="form-control" id="placeinput" placeholder="Type a type of place, Ex: Gas station, Shopping mall etc.. ">
-            </div>
-            <div class="form-group">
-             <label for="comment">Your Review:</label>
-             <textarea class="form-control" rows="5" id="reviewinput" placeholder="Describe about?"></textarea>
-             </div>
-             </form>
-         <span class="inline_button">Rate</span>
-         <br>
-         <br>
-        <div class="rating">
-    <span><input type="radio" name="rating" id="str5" value="5"><label for="str5"></label></span>
-    <span><input type="radio" name="rating" id="str4" value="4"><label for="str4"></label></span>
-    <span><input type="radio" name="rating" id="str3" value="3"><label for="str3"></label></span>
-    <span><input type="radio" name="rating" id="str2" value="2"><label for="str2"></label></span>
-    <span><input type="radio" name="rating" id="str1" value="1"><label for="str1"></label></span>
-        </div>
-        <br>
-     <span ><span class ="inline_button" id="JOTG" style="width: 10px">0</span> <b>of</b> <span class="inline_button" style="width: 10px">5</span> stars</span>
-        <br>
+
         <br>
              <!-- <img id="thumup" src="assets/images/thumbsup.png">
              <img id="thumdown" src="assets/images/thumbdown.png"> -->
              
-            <button type="button" class="btn btn-default" onclick="submit_data(this)">Submit</button>
-            <button type="submit" class="btn btn-default"><a href="index.html">Go Back</a></button>
           
-    <div id="map_div"></div>
         </div>
       </div>
     </div>
@@ -170,6 +153,7 @@ function updateHTML(){
 
 <!-- Review body end -->
 <!-- </div> -->
+<script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
 <script>
   // Initialize Firebase
   var config = {
@@ -180,37 +164,33 @@ function updateHTML(){
     messagingSenderId: "181006011839"
   };
   firebase.initializeApp(config);
-  var head = document.getElementById('hh');
+var head = document.getElementById('hh');
 var myFirebaseRef = new Firebase("https://johnny-e3032.firebaseio.com/");
-  
-
-// submit data
-var formData = {};
-
-function submit_data(){
-formData.address = document.getElementById('pac-input').value;
-formData.name = document.getElementById('nameinput').value;
-formData.place = document.getElementById('placeinput').value;
-formData.review = document.getElementById('reviewinput').value;
-formData.rating = $('input[name="rating"]:checked').val();
-if(!formData.rating){
-  alert('Please select rating');
-return;
-}
-
-  myFirebaseRef.push(formData);
-}
+var dbref = firebase.database().ref();
+//dbref.on('value',snap => head.innerText = snap.val());
 
 
-/*  myFirebaseRef.set({
-  title: "Hello World!",
-  author: "Firebase",
-  location: {
-    city: "San Francisco",
-    state: "California",
-    zip: 94103
+// Attach an asynchronous callback to read the data at our posts reference
+dbref.on("value", function(snapshot) {
+  $('#reviews ul').html('');
+  var allReviews = snapshot.val();
+  var allReviewsLength = Object.keys(allReviews);
+  // loop through the values
+  for(var i = 0;i<allReviewsLength.length;i++){
+    $('#reviews ul').append('<li class="review review'+i+'"></li>');
+    var li = $('#reviews ul .review'+i);
+    // loop through the object
+    console.log(allReviews[allReviewsLength[i]]);
+    for (var property in allReviews[allReviewsLength[i]]) {
+      if (allReviews[allReviewsLength[i]].hasOwnProperty(property)) {
+        li.append('<span>'+allReviews[allReviewsLength[i]][property]+'</span>')
+      }
   }
-});*/
+}
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});
+
 </script>
 
 </body>
