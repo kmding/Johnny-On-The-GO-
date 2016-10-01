@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Johnny On the Go!!!</title>
+    <!-- bootstrap link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- link to css -->
+    <link rel="stylesheet" type="text/css" href="assets/css/css.css">
+    <!-- jquery -->
+   <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+   <!-- bootstrap javascript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <!-- firebadse -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script> -->
+<style>
+.rating {
+    float: left;
+    width:70px;
+}
+.rating span { float:right; position:relative; }
+
+.rating span input {
+    position:absolute;
+    top:0px;
+    left:0px;
+    opacity:0;
+}
+.rating span label {
+    display:inline-block;
+    width:10px;
+    height:10px;
+    text-align:center;
+    color:#FFF;
+    background:#ccc;
+    font-size:30px;
+    margin-right:2px;
+    line-height:30px;
+    border-radius:50%;
+    -webkit-border-radius:50%;
+}
+.rating span:hover ~ span label,
+.rating span:hover label,
+.rating span.checked label,
+.rating span.checked ~ span label {
+    background:#F90;
+    color:#FFF;
+}
+	.inline_button{
+        border: 1px solid #f90; 
+        border-radius: 3px; 
+        padding-left: 5px; 
+        padding-right: 5px; 
+        margin-top: 13px;
+        font-size: 12px; 
+        color: #fff; 
+        background-color: #f90; 
+        width: 80px; 
+        margin-top: 6px;
+        margin-bottom: 20px;
+        margin-right: 4px;
+        }
+        
+        #review-body{
+          width: 0px;
+          position: relative;
+          right: 0px;
+          top: 0px;
+          bottom: 0px;
+          margin: auto;
+    -webkit-transition: width 0.5s; 
+    transition: width 0.5s;
+          }
+          #reviews{
+            float: left;
+          }
+          #reviews ul{
+            float: left;
+            width: 100%;
+          }
+          #reviews ul li{
+            float: left;
+            width: 100%;
+          }
+          #reviews ul li span{
+            float: left;
+            width: 100%;
+          }
+          
+</style>
+
+
+        <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+  <script type="text/javascript" src="assets/javascript/js.js"></script>
+<script type="text/javascript">
+
+window.onload = function(){
+  document.getElementById("review-body").style.width = "50%";
+  document.getElementById("addressinput").value = ( (localStorage.getItem("JOTG_address") === "undefined" ) ? "Local storage not supported or undefined. Please copy and paste address" + localStorage.getItem("JOTG_address")  : localStorage.getItem("JOTG_address") );
+  }
+  
+var JOTG_Rating;
+$(document).ready(function(){
+//  Check Radio-box
+    $(".rating input:radio").attr("checked", false);
+    $('.rating input').click(function () {
+        $(".rating span").removeClass('checked');
+        $(this).parent().addClass('checked');
+    });
+
+    $('input:radio').change(
+    function(){
+        var userRating = this.value;
+        JOTG_Rating = userRating;
+        updateHTML();
+    }); 
+});
+
+function updateHTML(){
+    document.getElementById("JOTG").innerHTML = JOTG_Rating;
+    }
+    
+</script>
+
+</head>
+<body >
+
+<!-- Review wrapper -->
+<div id="review-body">
+  <!-- Text box -->
+    <div class="container" id="textBox">
+      <h2>Review</h2>
+   </div>
+
+    <!-- Sign-Up Panel-->
+    <div class="col-lg-6" style="width: 100%">
+    <div class="panel panel-default">
+        <div class="panel-body">
+          <div id="reviews">
+            <ul></ul>
+          </div>
+          <!-- Sign-up Form (note the various input "types")-->
+
+        <br>
+             <!-- <img id="thumup" src="assets/images/thumbsup.png">
+             <img id="thumdown" src="assets/images/thumbdown.png"> -->
+             
+          
+        </div>
+      </div>
+    </div>
+<!-- Most Recent Member Panel -->
+  </div>
+
+<!-- Review body end -->
+<!-- </div> -->
+<script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBdNdJ6pVUXS2ZMajYrdv8hwrK-ZncKqgg",
+    authDomain: "johnny-e3032.firebaseapp.com",
+    databaseURL: "https://johnny-e3032.firebaseio.com",
+    storageBucket: "",
+    messagingSenderId: "181006011839"
+  };
+  firebase.initializeApp(config);
+var head = document.getElementById('hh');
+var myFirebaseRef = new Firebase("https://johnny-e3032.firebaseio.com/");
+var dbref = firebase.database().ref();
+//dbref.on('value',snap => head.innerText = snap.val());
+
+
+// Attach an asynchronous callback to read the data at our posts reference
+dbref.on("value", function(snapshot) {
+  $('#reviews ul').html('');
+  var allReviews = snapshot.val();
+  var allReviewsLength = Object.keys(allReviews);
+  // loop through the values
+  for(var i = 0;i<allReviewsLength.length;i++){
+    $('#reviews ul').append('<li class="review review'+i+'"></li>');
+    var li = $('#reviews ul .review'+i);
+    // loop through the object
+    console.log(allReviews[allReviewsLength[i]]);
+    for (var property in allReviews[allReviewsLength[i]]) {
+      if (allReviews[allReviewsLength[i]].hasOwnProperty(property)) {
+        li.append('<span>'+allReviews[allReviewsLength[i]][property]+'</span>')
+      }
+  }
+}
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});
+
+</script>
+
+</body>
+</html>
