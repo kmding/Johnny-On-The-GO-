@@ -70,3 +70,13 @@ html, body {
   margin-top: 30px;
   /*overflow: hidden;*/
 }
+#name{
+  
+  font-family: 'Oleo Script', cursive;
+  position: absolute;
+  z-index: 100;
+  top:  9px;
+  margin-left: 40%;
+  font-size: 40px;
+  /*text-align:  center;*/
+}
