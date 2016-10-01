@@ -14,6 +14,7 @@ var dnVote = 0;
 
 function initAutocomplete() {
     initMap();
+
     // Create the search box and link it to the UI element.
     var input = document.getElementById('pac-input');
     var searchBox = new google.maps.places.SearchBox(input);
@@ -32,7 +33,7 @@ function initAutocomplete() {
         }
         // Clear out the old markers.
         // markers.forEach(function(marker) {
-        //   marker.setMap(null);
+        // marker.setMap(null);
         // });
         // markers = [];
         // For each place, get the icon, name and location.
@@ -129,8 +130,8 @@ var initMap = function() {
                 // service.nearbySearch(request, callback);
             service.nearbySearch({
                 location: pos,
-                radius: 5000,
-                type: ['store'],
+                radius: 8000,
+                type: ['stores'],
             }, callback);
 
             function callback(results, status) {
@@ -150,11 +151,13 @@ var initMap = function() {
                 });
 
                 google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.setContent("great");
+                    // infowindow.setContent(place.name);
+                    infowindow.setContent("<input type='button' value='Save & Close' onclick='saveData()'/>");
                     infowindow.open(map, this);
                     // infowindow.nameMarker();
                 });
             }
+
             infoWindow.setPosition(pos);
             getCity({ latitude: position.coords.latitude, longitude: position.coords.longitude }, function(city) {
                 console.log(city);
@@ -176,11 +179,47 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         'Error: The Geolocation service failed.' :
         'Error: Your browser doesn\'t support geolocation.');
 }
+// google.maps.event.addListener(button, 'click', function(){
+//   console.log("working");
+// })
 // to type and display review
+ // var addressinput = new google.maps.places.Autocomplete(
+ //      * @type {!HTMLInputElement} (document.getElementById('addressinput')),
+ //      {types: ['geocode']});
+ // function adressAutofil(){
+ // address = document.getElementById('addressinput');
+ //    var addressBox = new google.maps.places.AddressBox(address);
+ //  }
+ $(function(){
+        
+        $("#addressinput").geocomplete()
+          .bind("geocode:result", function(event, result){
+            $.log("Result: " + result.formatted_address);
+          })
+          .bind("geocode:error", function(event, status){
+            $.log("ERROR: " + status);
+          })
+          .bind("geocode:multiple", function(event, results){
+            $.log("Multiple: " + results.length + " results found");
+          });
+        
+        // $("#find").click(function(){
+        //   $("#addressinput").trigger("geocode");
+        // });
+        
+        
+        // $("#examples a").click(function(){
+        //   $("#geocomplete").val($(this).text()).trigger("geocode");
+        //   return false;
+        // });
+        
+      });
 $("#addRev").on('click', function() {
     // e.preventDefault();
     var name = $("#namelinput").val().trim();
-    var address = $("#autocomplete").val().trim();
+    var address = $("#addressinput").val().trim();
+    // var address = document.getElementById('addressinput');
+    // var addressBox = new google.maps.places.AddressBox(address);
     // var hours = $("#hoursdisplay").val().trim();
     var place = $("#placeinput").val().trim();
     var review = $("#reviewinput").val().trim();
@@ -191,36 +230,49 @@ $("#addRev").on('click', function() {
     console.log(review);
     console.log(address);
 
-    // $("#addressdisplay").html(address);
-    // $("#namedisplay").html(name);
-    // $("#placedisplay").html(place);
-    // $("#reviewdisplay").html(review);
     $("#namedisplay").append(name);
     $("#ratingdisplay").append("Rating: " + rating + " Stars");;
     $("#addressdisplay").append(address);
-    $("#hoursdisplay").append(hours);
+    // $("#hoursdisplay").append(hours);
     $("#placedisplay").append(place);
     $("#reviewdisplay").append(review);
 
     // create an object to hold the data
-    var addedReview = {
-            Name: name,
-            Address: address,
-            Place: place,
-            Review: review,
-            Rating: rating
-        }
+    // var addedReview = {
+    //         Name: name,
+    //         Address: address,
+    //         Place: place,
+    //         Review: review,
+    //         Rating: rating
+    //     }
     // upload data to the database
-    database.ref().push(newTrain);
+    // database.ref().push(newTrain);
     // clear input boxes
-    $("#namelinput").val(" ")
-    $("#autocomplete").val(" ")
+    // $("#namelinput").val(" ")
+    // $("#autocomplete").val(" ")
     // $("#hoursdisplay").val(" ");
-    $("#placeinput").val(" ");
-    $("#reviewinput").val(" ");
+    // $("#placeinput").val(" ");
+    // $("#reviewinput").val(" ");
     // show the data instead of directly moving to the another map
     return false;
 });
+
+// database.ref().on("value", function(snapshot){
+
+//   console.log(snapshot.val());
+//   console.log(snapshot.val().name);
+//   console.log(snapshot.val().email);
+//   console.log(snapshot.val().age);
+//   console.log(snapshot.val().comment);
+//   // Change the HTML to reflect
+//   $("#namedisplay").html(snapshot.val().name);
+//   // $("#ratingdisplay").html("Rating: " + rating + " Stars");;
+//   $("#addressdisplay").html(snapshot.val().address);
+//   $("#hoursdisplay").html(snapshot.val().hours);
+//   $("#placedisplay").html(snapshot.val().place);
+//   $("#reviewdisplay").html(snapshot.val().review);
+
+//   });
 // database.ref().on("child_added", function(childSnapshot, prevChildKey){
 
 //   console.log(childSnapshot.val());
@@ -230,7 +282,7 @@ $("#addRev").on('click', function() {
 //   var address = childSnapshot.val().Address;
 //   var place = childSnapshot.val().Place;
 //   var review = childSnapshot.val().Review;
-//   var rating = childSnapshot.val().Rating;
+//   // var rating = childSnapshot.val().Rating;
 
 //   // Employee Info
 //   console.log(name);
@@ -240,9 +292,9 @@ $("#addRev").on('click', function() {
 //   console.log(rating);
 
 //   $("#namedisplay").html(name);
-//   $("#ratingdisplay").html("Rating: " + rating + " Stars");;
+//   // $("#ratingdisplay").html("Rating: " + rating + " Stars");;
 //   $("#addressdisplay").html(address);
-//   $("#hoursdisplay").html(hours);
+//   // $("#hoursdisplay").html(hours);
 //   $("#placedisplay").html(place);
 //   $("#reviewdisplay").html(review);
 // });
